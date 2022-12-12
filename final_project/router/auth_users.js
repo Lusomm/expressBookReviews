@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 let books = require("./booksdb.js");
+
 const regd_users = express.Router();
 
 users = [{"username":"tester",
@@ -8,7 +9,7 @@ users = [{"username":"tester",
 
 const isValid = (username)=>{ //returns boolean
     let users_with_username = users.filter(user => {
-        user.username === username;
+        return user.username === username;
     });
     if(users_with_username.length>0){
         return true;
