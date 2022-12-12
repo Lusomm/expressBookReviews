@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 let books = require("./booksdb.js");
 const regd_users = express.Router();
 
-let users = [];
+users = [{"username":"tester",
+                "password":"pwd"}];
 
 const isValid = (username)=>{ //returns boolean
     let users_with_username = users.filter(user => {
@@ -18,8 +19,8 @@ const isValid = (username)=>{ //returns boolean
 }
 
 const authenticatedUser = (username,password)=>{ //returns boolean
-    let auth_users = users.filter(user =>{
-        user.username === username && user.password === password;
+    const auth_users = users.filter((user) =>{
+        return (user.username === username)&&(user.password===password);
     });
     if(auth_users.length > 0){
         return true;
@@ -31,9 +32,8 @@ const authenticatedUser = (username,password)=>{ //returns boolean
 
 //only registered users can login
 regd_users.post("/login", (req,res) => {
-    const username = req.query.username;
-    const password = req.query.password;
-  
+    const username = req.body.username;
+    const password = req.body.password;
     if (!username || !password) {
         return res.status(404).json({message: "Error logging in"});
     }
@@ -47,7 +47,8 @@ regd_users.post("/login", (req,res) => {
         accessToken,username
     }
     return res.status(200).send("User successfully logged in");
-    } else {
+    } 
+    else {
       return res.status(208).json({message: "Invalid Login. Check username and password"});
     }
 });

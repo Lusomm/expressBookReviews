@@ -12,32 +12,63 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    res.send(JSON.stringify(books));
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
- });
+    const book = books[req.params.isbn];
+    if(book){
+        res.send(JSON.stringify(book));
+    }
+    else{
+        res.send( "ISBN not found");
+    }
+});
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    const author = req.params.author;
+    let booksFromAuthor = [];
+    Object.values(books).forEach(book =>{
+        if(book.author===author){
+            booksFromAuthor.push(book);
+        }
+    });
+    if(booksFromAuthor.length > 0){
+        res.send(JSON.stringify(booksFromAuthor));
+    }
+    else{
+        res.send("No books from author");
+    }
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    const title = req.params.title;
+    let booksWithTitle = [];
+    Object.values(books).forEach(book =>{
+        if(book.title===title){
+            booksWithTitle.push(book);
+        }
+    });
+    if(booksWithTitle.length > 0){
+        res.send(JSON.stringify(booksWithTitle));
+    }
+    else{
+        res.send("No books with this title");
+    }
 });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    const book = books[req.params.isbn];
+    if(book){
+        res.send(JSON.stringify(book.reviews));
+    }
+    else{
+        res.send( "ISBN not found");
+    }
 });
 
 module.exports.general = public_users;
