@@ -59,26 +59,14 @@ regd_users.put("/review/:isbn", (req, res) => {
     const book = books[req.params.isbn];
     const username = req.session["username"];
     if(book){
-        if(book.reviews){
-            book.reviews.add({"username":username, "review":req.query.review});
-            res.send("New Review added");
-        }
-        else {
+        if(Object.keys(book.reviews).length>0){
+            
             book.reviews = {"username":username, "review":req.query.review};
             res.send("First review added");
         }
-        /*
-        let existing_review = book.reviews.filter(review =>{
-            return false;
-        });
-        if(existing_review){
-            let review = {"username":username, "review":review};
-            book.reviews = book.reviews.filter(review =>{
-                return review.username != username;
-            });
-            book.reviews.push(review);
-            res.send("Existing Review changed");
-        }*/
+        else{
+            Object.assign(book.reviews, {"username":username, "review":req.query.review});
+        }  
     }
     else{
         res.send( "ISBN not found");
