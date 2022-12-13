@@ -31,30 +31,7 @@ app.use("/customer/auth/*", function auth(req,res,next){
  
 const PORT =5000;
 
-app.post("/customer/register", (req,res)=>{
-    let username = req.body.username;
-    let password = req.body.password;
-    if(username && password){
-        if(isValid(username)){
-            let user = users.filter(user=>{
-                return user===username;
-            });
-            user.password = password;
-            users = users.filter(user =>{
-                return user.username != username;
-            });
-            users.push(user); 
-            res.send("User already exists, password changed"); 
-        }
-        else{
-            users.push({"username":username, "password":password});
-            res.send("User added successfully");
-        }
-    }
-    else{
-        res.send("Username or password not provided");
-    }
-});
+
 
 app.use("/customer", customer_routes);
 app.use("/", genl_routes);
