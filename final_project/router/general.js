@@ -32,52 +32,74 @@ public_users.post("/customer/register", (req,res)=>{
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-    res.send(JSON.stringify(books));
+    let promise = new Promise ((resolve, reject)=>{
+        let result = JSON.stringify(books);
+        resolve(result);
+    }) ;
+    promise.then((books) =>{
+        res.send(books);
+    });
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-    const book = books[req.params.isbn];
-    if(book){
-        res.send(JSON.stringify(book));
-    }
-    else{
-        res.send( "ISBN not found");
-    }
+    let promise = new Promise((resolve, reject)=>{
+        const book = books[req.params.isbn];
+        if(book){
+            resolve(JSON.stringify(book));
+        }
+        else{
+            resolve( "ISBN not found");
+        }
+    });
+    promise.then((book)=>{
+        res.send(book);
+    });
 });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-    const author = req.params.author;
-    let booksFromAuthor = [];
-    Object.values(books).forEach(book =>{
-        if(book.author===author){
-            booksFromAuthor.push(book);
+    let promise = new Promise ((resolve, reject)=>{
+        const author = req.params.author;
+        let booksFromAuthor = [];
+        Object.values(books).forEach(book =>{
+            if(book.author===author){
+                booksFromAuthor.push(book);
+            }
+        });
+        if(booksFromAuthor.length > 0){
+            
+            resolve(JSON.stringify(booksFromAuthor));
+        }
+        else{
+            resolve("No books from author");
         }
     });
-    if(booksFromAuthor.length > 0){
-        res.send(JSON.stringify(booksFromAuthor));
-    }
-    else{
-        res.send("No books from author");
-    }
+    promise.then((book)=>{
+        res.send(book);
+    });
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-    const title = req.params.title;
-    let booksWithTitle = [];
-    Object.values(books).forEach(book =>{
-        if(book.title===title){
-            booksWithTitle.push(book);
+    let promise = new Promise((resolve, reject) => {
+        const title = req.params.title;
+        let booksWithTitle = [];
+        Object.values(books).forEach(book =>{
+            if(book.title===title){
+                booksWithTitle.push(book);
+            }
+        });
+        if(booksWithTitle.length > 0){
+            res.send(JSON.stringify(booksWithTitle));
+        }
+        else{
+            res.send("No books with this title");
         }
     });
-    if(booksWithTitle.length > 0){
-        res.send(JSON.stringify(booksWithTitle));
-    }
-    else{
-        res.send("No books with this title");
-    }
+    promise.then((book)=>{
+        res.send(book);
+    });
 });
 
 //  Get book review
